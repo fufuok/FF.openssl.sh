@@ -1,0 +1,28 @@
+# SSL 配置文件
+# IOS 13+ TLS 服务器证书必须在证书的“使用者备用名称”扩展中显示服务器的 DNS 名称。
+# IOS 13+ 证书的 CommonName 中的 DNS 名称不再受信任。
+# 必须添加 serverAuth 和 codeSigning
+
+[ req ]
+default_bits       = 4096
+distinguished_name = req_distinguished_name
+x509_extensions    = v3_req
+
+[ req_distinguished_name ]
+C = CN
+ST = SC
+L = CD
+O = XY
+OU = FF
+CN = XY.WWW
+
+[v3_req]
+keyUsage = keyEncipherment,dataEncipherment,nonRepudiation,digitalSignature  
+extendedKeyUsage = serverAuth,clientAuth,OCSPSigning,codeSigning
+subjectAltName = @alt_names
+basicConstraints = CA:FALSE
+
+[ alt_names ]
+IP.1    = 192.168.1.100
+DNS.1   = *.fufuok.com
+DNS.2   = *.demo.com
