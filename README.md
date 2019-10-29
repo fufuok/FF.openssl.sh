@@ -11,7 +11,9 @@
 3. 生成用户证书(如果需要):  
     - `./ff.crt.client.sh fufu中`
     - `./ff.crt.client.sh fufu中 7777 fufu 123456`
-
+4. 一句命令生成 crt 和 key:  
+    - `openssl req -x509 -sha256 -nodes -days 824 -newkey rsa:2048 -keyout server.key -out server.crt -subj "/C=CN/ST=SC/L=CD/O=XY/OU=FF/CN=*.fufuok.com"`
+    - 需要支持 IOS13 (使用者可选名称), 则在命令后加上 ` -config ./ff.ssl.demo.cnf`
 
 ## Nginx 配置
 

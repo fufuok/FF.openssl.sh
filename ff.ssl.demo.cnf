@@ -16,7 +16,7 @@ O = XY
 OU = FF
 CN = XY.WWW
 
-[v3_req]
+[ v3_req ]
 keyUsage = keyEncipherment,dataEncipherment,nonRepudiation,digitalSignature  
 extendedKeyUsage = serverAuth,clientAuth,OCSPSigning,codeSigning
 subjectAltName = @alt_names

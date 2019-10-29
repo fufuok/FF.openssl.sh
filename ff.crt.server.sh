@@ -34,7 +34,7 @@ openssl req -new -sha256 \
     -subj "/C=CN/ST=SC/L=CD/O=XY/OU=FF/CN=${CNAME}" \
     -utf8
 
-# 用户证书扩展
+# 服务端证书扩展
 cat >"${OUTFILE}.cnf" <<EOF
 authorityKeyIdentifier=keyid,issuer
 basicConstraints=CA:FALSE
@@ -46,7 +46,7 @@ subjectAltName=@alt_names
 DNS.1=${CNAME}
 EOF
 
-# 签发用户私有证书, -passin pass:***
+# 签发服务端私有证书, -passin pass:***
 openssl x509 -req -sha256 -days "${DAYS}" \
     -in "${OUTFILE}.csr" \
     -CA "${BASE}/demoCA/private/ca.crt" \
@@ -55,7 +55,7 @@ openssl x509 -req -sha256 -days "${DAYS}" \
     -out "${OUTFILE}.crt" \
     -extfile "${OUTFILE}.cnf"
 
-# 复制 CA 证书到用户目录
+# 复制 CA 证书到目录
 cp "${BASE}/demoCA/private/ca.crt" "${OUTDIR}/ca.crt"
 
 # 查看证书信息
