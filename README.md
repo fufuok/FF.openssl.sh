@@ -11,9 +11,11 @@
 3. 生成用户证书(如果需要):  
     - `./ff.crt.client.sh fufu中`
     - `./ff.crt.client.sh fufu中 7777 fufu 123456`
-4. 一句命令生成 crt 和 key:  
-    - `openssl req -x509 -sha256 -nodes -days 824 -newkey rsa:2048 -keyout server.key -out server.crt -subj "/C=CN/ST=SC/L=CD/O=XY/OU=FF/CN=*.fufuok.com"`
-    - 需要支持 IOS13 (使用者可选名称), 则在命令后加上 ` -config ./ff.ssl.demo.cnf`
+
+## 一行命令生成 crt 和 key:  
+
+- `openssl req -x509 -sha256 -nodes -days 824 -newkey rsa:2048 -keyout server.key -out server.crt -subj "/C=CN/ST=SC/L=CD/O=XY/OU=FF/CN=*.fufuok.com"`
+- 需要支持 IOS13 (使用者可选名称), 则在命令后加上 ` -config ./ff.ssl.demo.cnf`
 
 ## Nginx 配置
 
@@ -43,3 +45,28 @@ SSLCACertificateFile "conf/ssl/ca.crt"
 SSLVerifyClient require
 SSLVerifyDepth 10
 ````
+
+## 附录
+
+来自于 go h2demo 中的示例:
+
+```shell
+# Make CA (根证书安装到系统):
+openssl genrsa -out rootCA.key 2048
+openssl req -x509 -new -nodes -key rootCA.key -days 1024 -out rootCA.pem
+
+# Make cert:
+openssl genrsa -out server.key 2048
+openssl req -new -key server.key -out server.csr
+openssl x509 -req -in server.csr -CA rootCA.pem -CAkey rootCA.key -CAcreateserial -out server.crt -days 500
+```
+
+快捷生成双向证书(也就是最上面一行命令生成 crt 和 key 运行 2 次, 相同域名生成 2 套证书):
+
+```shell
+# 服务端证书
+openssl req -new -nodes -x509 -out server.pem -keyout server.key -days 7777 -subj "/C=CN/ST=SC/L=CD/O=XY/OU=FF/CN=*.fufuok.com"
+# 客户端证书
+openssl req -new -nodes -x509 -out client.pem -keyout client.key -days 7777 -subj "/C=CN/ST=SC/L=CD/O=XY/OU=FF/CN=*.fufuok.com"
+```
+
